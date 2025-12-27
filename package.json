@@ -10,6 +10,10 @@
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
+    "start-gateway": "nest start gateway --watch",
+    "start-catalog": "nest start catalog --watch",
+    "start-search": "nest start search --watch",
+    "start-media": "nest start media --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/apps/nest-micro/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
@@ -22,6 +26,7 @@
   "dependencies": {
     "@nestjs/common": "^11.0.1",
     "@nestjs/core": "^11.0.1",
+    "@nestjs/microservices": "^11.1.10",
     "@nestjs/platform-express": "^11.0.1",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"
