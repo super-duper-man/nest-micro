@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { SearchModule } from './search.module';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { Logger } from '@nestjs/common';
+import { applyExceptionFilterToMicroServiceLayer } from '@app/rpc';
 
 async function bootstrap() {
   process.title = 'search';
@@ -23,6 +24,8 @@ async function bootstrap() {
       },
     },
   );
+
+  applyExceptionFilterToMicroServiceLayer(app);
 
   app.enableShutdownHooks();
 

@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { Logger } from '@nestjs/common';
 import { Transport, MicroserviceOptions } from '@nestjs/microservices';
 import { MediaModule } from './media.module';
+import { applyExceptionFilterToMicroServiceLayer } from '@app/rpc';
 
 async function bootstrap() {
   process.title = 'media';
@@ -23,6 +24,8 @@ async function bootstrap() {
       },
     },
   );
+
+  applyExceptionFilterToMicroServiceLayer(app);
 
   app.enableShutdownHooks();
 
