@@ -1,6 +1,6 @@
 import { createClerkClient } from '@clerk/backend';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { verifyToken } from 'node_modules/@clerk/backend/dist/tokens/verify';
+import { verifyToken } from '@clerk/backend';
 import { UserContext } from './auth.types';
 
 @Injectable()
@@ -16,14 +16,14 @@ export class AuthService {
         };
     };
 
- verifyAndBuildContext = async (token: string): Promise<UserContext> => {
+    verifyAndBuildContext = async (token: string): Promise<UserContext> => {
         try {
             const verified: any = await verifyToken(token, this.jwtVerifyOptions());
             const payload = verified?.payload ?? verified?.payload ?? verified;
 
             const clerkUserId = payload?.sub ?? payload?.userId;
 
-            if(!clerkUserId)
+            if (!clerkUserId)
                 throw new UnauthorizedException('Token is missing userId');
 
             const role: 'user' | 'admin' = 'user';
@@ -32,29 +32,29 @@ export class AuthService {
 
             const nameFromToken = payload?.name ?? payload?.fullName ?? payload?.username ?? '';
 
-            if(emailFromToken && nameFromToken)
+            if (emailFromToken && nameFromToken)
                 return {
                     clerkUserId,
                     email: emailFromToken,
                     name: nameFromToken,
                     role
-                }
+                };
 
-                const user = await this.clerk.users.getUser(clerkUserId);
+            const user = await this.clerk.users.getUser(clerkUserId);
 
-                const primaryEmail = user.emailAddresses.find((e) => e.id === user.primaryEmailAddressId)?.emailAddress ?? user.emailAddresses[0]?.emailAddress;
+            const primaryEmail = user.emailAddresses.find((e) => e.id === user.primaryEmailAddressId)?.emailAddress ?? user.emailAddresses[0]?.emailAddress;
 
-                const fullName = [user.firstName, user.lastName].filter(Boolean).join(' ') || user.username || primaryEmail || clerkUserId;
+            const fullName = [user.firstName, user.lastName].filter(Boolean).join(' ') || user.username || primaryEmail || clerkUserId;
 
-                return {
-                    clerkUserId,
-                    email: emailFromToken || primaryEmail,
-                    name: nameFromToken || fullName,
-                    role
-                }
+            return {
+                clerkUserId,
+                email: emailFromToken || primaryEmail,
+                name: nameFromToken || fullName,
+                role
+            };
 
-        }catch(err){
-            throw new UnauthorizedException('Invalid or expired token')
+        } catch (err) {
+            throw new UnauthorizedException('Invalid or expired token');
         }
-    }
+    };
 }
