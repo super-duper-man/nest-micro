@@ -39,5 +39,6 @@ import { AuthGuard } from './auth/auth.guard';
   ],
   controllers: [GatewayController],
   providers: [GatewayService, AuthService, AuthGuard],
+  exports: [AuthService]
 })
 export class GatewayModule {}
