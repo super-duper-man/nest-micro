@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { GatewayController } from './gateway.controller';
 import { GatewayService } from './gateway.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { AuthService } from './auth/auth.service';
+import { AuthGuard } from './auth/auth.guard';
 
 @Module({
   imports: [
@@ -36,6 +38,6 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
     ])
   ],
   controllers: [GatewayController],
-  providers: [GatewayService],
+  providers: [GatewayService, AuthService, AuthGuard],
 })
 export class GatewayModule {}
