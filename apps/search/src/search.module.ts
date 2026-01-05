@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { SearchController } from './search.controller';
 import { SearchService } from './search.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { SearchEventModule } from './searchEvent/search-event.module';
 
 @Module({
   imports: [
@@ -15,7 +16,8 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
           queueOptions: { durable: false }
         }
       }
-    ])
+    ]),
+    SearchModule
   ],
   controllers: [SearchController],
   providers: [SearchService],
