@@ -4,10 +4,11 @@ import { Product, ProductDocument } from './product.schema';
 import { isValidObjectId, Model } from 'mongoose';
 import { CreateProductDto } from './product.dto';
 import { rpcBadRequest, rpcNotFound } from '@app/rpc';
+import { ProductEventsPublisher } from '../events/product-events.publisher';
 
 @Injectable()
 export class ProductService {
-    constructor(@InjectModel(Product.name) private readonly productModel: Model<ProductDocument>) { }
+    constructor(@InjectModel(Product.name) private readonly productModel: Model<ProductDocument>, private readonly event: ProductEventsPublisher) { }
 
     async createProduct(product: CreateProductDto) {
         if (!product.name || !product.price)
@@ -18,6 +19,8 @@ export class ProductService {
 
 
         const newProduct = await this.productModel.create(product);
+
+        this.event.productCreated({...newProduct, _id: String(newProduct._id)});
 
         return newProduct;
     }
