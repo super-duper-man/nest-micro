@@ -3,6 +3,7 @@ import { SearchController } from './search.controller';
 import { SearchService } from './search.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { SearchEventModule } from './searchEvent/search-event.module';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { SearchEventModule } from './searchEvent/search-event.module';
         }
       }
     ]),
+    MongooseModule.forRoot(String(process.env.ATLAS_SEARCH_DB)),
     SearchModule
   ],
   controllers: [SearchController],
