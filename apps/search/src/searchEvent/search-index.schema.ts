@@ -10,9 +10,12 @@ export class SearchProduct {
 
     @Prop({ required: true })
     name: string;
+
     @Prop({ required: true })
     normalizeText: string;
 
+    @Prop({ required: true })
+    description: string;
 
     @Prop({ required: true, enum: ['DRAFT', 'ACTIVE'], default: 'DRAFT' })
     status: 'DRAFT' | 'ACTIVE';
