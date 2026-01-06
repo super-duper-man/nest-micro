@@ -1,12 +1,17 @@
-import { Module } from '@nestjs/common';
+import { Module, Search } from '@nestjs/common';
 import { SearchController } from './search.controller';
 import { SearchService } from './search.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { SearchEventModule } from './searchEvent/search-event.module';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ConfigModule } from '@nestjs/config';
+import { SearchProduct, SearchProductSchema } from './searchEvent/search-index.schema';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    MongooseModule.forRoot(String(process.env.ATLAS_SEARCH_DB)),
+    MongooseModule.forFeature([{ name: SearchProduct.name, schema: SearchProductSchema }]),
     ClientsModule.register([
       {
         name: 'CATALOG_EVENT_CLIENT',
@@ -18,8 +23,7 @@ import { MongooseModule } from '@nestjs/mongoose';
         }
       }
     ]),
-    MongooseModule.forRoot(String(process.env.ATLAS_SEARCH_DB)),
-    SearchModule
+    SearchEventModule
   ],
   controllers: [SearchController],
   providers: [SearchService],
